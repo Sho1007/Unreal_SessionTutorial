@@ -2,9 +2,3 @@
 
 
 #include "../GameMode/MainMenuGameMode.h"
-
-void AMainMenuGameMode::BeginPlay()
-{
-	Super::BeginPlay();
-	//check(MainMenuWidgetClass);
-}

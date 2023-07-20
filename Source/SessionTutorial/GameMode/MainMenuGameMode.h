@@ -9,17 +9,8 @@
 /**
  * 
  */
-//class UMainMenuWidget;
 UCLASS()
 class SESSIONTUTORIAL_API AMainMenuGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-
-protected:
-	virtual void BeginPlay() override;
-	
-private:
-	//UPROPERTY(EditDefaultsOnly, Meta = (AllowPrivateAccess = true))
-	//TSubclassOf<UMainMenuWidget> MainMenuWidgetClass;
-	//UMainMenuWidget* MainMenuWidget;
 };
