@@ -30,6 +30,20 @@ void UMyGameInstance::Host()
 	}
 }
 
-void UMyGameInstance::Join()
+void UMyGameInstance::Join(const FString& IPAddress)
 {
+	if (GEngine)
+	{
+		if (UWorld* World = GetWorld())
+		{
+			if (APlayerController* PlayerController = World->GetFirstPlayerController())
+			{
+				if (AMainMenuHUD* HUD = PlayerController->GetHUD<AMainMenuHUD>())
+				{
+					HUD->TearDown();
+				}
+				PlayerController->ClientTravel(IPAddress, TRAVEL_Absolute);
+			}
+		}
+	}
 }

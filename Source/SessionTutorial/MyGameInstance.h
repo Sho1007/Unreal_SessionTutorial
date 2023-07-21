@@ -22,5 +22,5 @@ public:
 
 	// Inherited via IMainMenuInterface
 	virtual void Host() override;
-	virtual void Join() override;
+	virtual void Join(const FString& IPAddress) override;
 };

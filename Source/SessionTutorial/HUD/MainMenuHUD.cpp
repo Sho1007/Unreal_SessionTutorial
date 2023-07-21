@@ -15,7 +15,6 @@ void AMainMenuHUD::BeginPlay()
 		MainMenuWidget = CreateWidget<UMainMenuWidget>(GetOwningPlayerController(), MainMenuWidgetClass, TEXT("MainMenuWidget"));
 		check(MainMenuWidget);
 		MainMenuWidget->Setup();
-		MainMenuWidget->AddToViewport();
 	}
 }
 

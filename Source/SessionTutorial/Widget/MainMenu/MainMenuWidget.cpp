@@ -3,6 +3,8 @@
 #include "../MainMenu/MainMenuWidget.h"
 
 #include <Components/Button.h>
+#include <Components/WidgetSwitcher.h>
+#include <Components/EditableText.h>
 #include <GameFramework/GameState.h>
 
 #include "../../Interface/MainMenuInterface.h"
@@ -14,6 +16,8 @@ bool UMainMenuWidget::Initialize()
 
 	Btn_Host->OnClicked.AddDynamic(this, &UMainMenuWidget::OnClickedHostButton);
 	Btn_Join->OnClicked.AddDynamic(this, &UMainMenuWidget::OnClickedJoinButton);
+	Btn_Connect->OnClicked.AddDynamic(this, &UMainMenuWidget::OnClickedConnectButton);
+	Btn_Cancle->OnClicked.AddDynamic(this, &UMainMenuWidget::OnClickedCancleButton);
 
 	return true;
 }
@@ -63,8 +67,21 @@ void UMainMenuWidget::OnClickedHostButton()
 
 void UMainMenuWidget::OnClickedJoinButton()
 {
+	WS_ChangeMenu->SetActiveWidgetIndex(1);
+}
+
+void UMainMenuWidget::OnClickedConnectButton()
+{
 	if (MainMenuInterface)
 	{
-		MainMenuInterface->Join();
+		MainMenuInterface->Join(ET_IPAddress->GetText().ToString());
 	}
+}
+
+void UMainMenuWidget::OnClickedCancleButton()
+{
+	// Clear Text
+	ET_IPAddress->SetText(FText());
+
+	WS_ChangeMenu->SetActiveWidgetIndex(0);
 }

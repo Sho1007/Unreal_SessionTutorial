@@ -11,6 +11,8 @@
  */
 class UButton;
 class IMainMenuInterface;
+class UWidgetSwitcher;
+class UEditableText;
 UCLASS()
 class SESSIONTUTORIAL_API UMainMenuWidget : public UUserWidget
 {
@@ -28,12 +30,27 @@ private:
 	void OnClickedHostButton();
 	UFUNCTION()
 	void OnClickedJoinButton();
+	UFUNCTION()
+	void OnClickedConnectButton();
+	UFUNCTION()
+	void OnClickedCancleButton();
 	
 private:
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
 	UButton* Btn_Host;
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
 	UButton* Btn_Join;
+	
+	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
+	UButton* Btn_Connect;
+	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
+	UButton* Btn_Cancle;
+
+	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
+	UWidgetSwitcher* WS_ChangeMenu;
+
+	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
+	UEditableText* ET_IPAddress;
 
 	IMainMenuInterface* MainMenuInterface;
 };
