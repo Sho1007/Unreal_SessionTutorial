@@ -7,31 +7,22 @@
 
 void UInGameMenuWidget::Setup()
 {
-	this->AddToViewport();
-	this->SetVisibility(ESlateVisibility::Collapsed);
-
-	/*if (APlayerController* PlayerController = GetOwningPlayer())
+	if (APlayerController* PlayerController = GetOwningPlayer())
 	{
-		
+		PlayerController->SetInputMode(FInputModeGameAndUI());
+		PlayerController->SetShowMouseCursor(true);
+		this->SetVisibility(ESlateVisibility::Visible);
 	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("UInGameMenuWidget::Setup : OwningPlayer is not Valid"));
-	}*/
 }
 
 void UInGameMenuWidget::TearDown()
 {
-	this->RemoveFromViewport();
-
-	/*if (APlayerController* PlayerController = GetOwningPlayer())
+	if (APlayerController* PlayerController = GetOwningPlayer())
 	{
-		
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		PlayerController->SetShowMouseCursor(false);
+		this->SetVisibility(ESlateVisibility::Collapsed);
 	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("UInGameMenuWidget::TearDown : OwningPlayer is not Valid"));
-	}*/
 }
 
 bool UInGameMenuWidget::Initialize()
@@ -48,11 +39,11 @@ void UInGameMenuWidget::OnClickedQuitButton()
 {
 	if (UWorld* World = GetWorld())
 	{
-		World->ServerTravel(TEXT("/Game/Levels/L_MainMenu"));
+		World->ClientTravel(TEXT("/Game/Levels/L_MainMenu"));
 	}
 }
 
 void UInGameMenuWidget::OnClickedCancleButton()
 {
-	this->SetVisibility(ESlateVisibility::Collapsed);
+	this->Hide();
 }

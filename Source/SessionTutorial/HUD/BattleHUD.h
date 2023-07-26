@@ -9,12 +9,20 @@
 /**
  * 
  */
+class UInGameMenuWidget;
 UCLASS()
 class SESSIONTUTORIAL_API ABattleHUD : public AHUD
 {
 	GENERATED_BODY()
 	
+public:
+	void TearDown();
+
+	void ToggleInGameMenu();
+protected:
+	virtual void BeginPlay() override;
 private:
-	UPROPERTY(Meta = (AllowPirvateAccess = true))
-	
+	UPROPERTY(EditDefaultsOnly, Meta = (AllowPirvateAccess = true))
+	TSubclassOf<UInGameMenuWidget> InGameMenuWidgetClass;
+	UInGameMenuWidget* InGameMenuWidget;
 };
