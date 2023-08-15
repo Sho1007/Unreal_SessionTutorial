@@ -116,7 +116,7 @@ void ABattleCharacter::Look(const FInputActionInstance& Instance)
 
 void ABattleCharacter::InGameMenuPressed(const FInputActionInstance& Instance)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("ABattleCharacter::InGameMenuPressed : Called"));
+	UE_LOG(LogTemp, Warning, TEXT("ABattleCharacter::InGameMenuPressed : Called"));
 
 	if (APlayerController* PC = Cast<APlayerController>(GetController()))
 	{

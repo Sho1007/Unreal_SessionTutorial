@@ -22,3 +22,8 @@ void AMainMenuHUD::TearDown()
 {
 	MainMenuWidget->Teardown();
 }
+
+void AMainMenuHUD::SetServerList(const TArray<FOnlineSessionSearchResult>& SearchResults)
+{
+	MainMenuWidget->SetServerList(SearchResults);
+}

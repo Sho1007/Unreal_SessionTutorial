@@ -5,10 +5,14 @@
 
 #include <Components/Button.h>
 
+#include "../../Interface/MainMenuInterface.h"
+
 void UInGameMenuWidget::Setup()
 {
+	UE_LOG(LogTemp, Log, TEXT("UInGameMenuWidget::Setup Called"));
 	if (APlayerController* PlayerController = GetOwningPlayer())
 	{
+		this->AddToViewport();
 		PlayerController->SetInputMode(FInputModeGameAndUI());
 		PlayerController->SetShowMouseCursor(true);
 		this->SetVisibility(ESlateVisibility::Visible);
@@ -19,6 +23,7 @@ void UInGameMenuWidget::TearDown()
 {
 	if (APlayerController* PlayerController = GetOwningPlayer())
 	{
+		this->RemoveFromViewport();
 		PlayerController->SetInputMode(FInputModeGameOnly());
 		PlayerController->SetShowMouseCursor(false);
 		this->SetVisibility(ESlateVisibility::Collapsed);
@@ -37,13 +42,13 @@ bool UInGameMenuWidget::Initialize()
 
 void UInGameMenuWidget::OnClickedQuitButton()
 {
-	if (UWorld* World = GetWorld())
+	if (IMainMenuInterface* Interface = Cast<IMainMenuInterface>(GetGameInstance()))
 	{
-		World->ClientTravel(TEXT("/Game/Levels/L_MainMenu"));
+		Interface->LoadMainMenu();
 	}
 }
 
 void UInGameMenuWidget::OnClickedCancleButton()
 {
-	this->Hide();
+	this->TearDown();
 }

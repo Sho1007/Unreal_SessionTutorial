@@ -13,4 +13,7 @@ UCLASS()
 class SESSIONTUTORIAL_API AMainMenuGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
+	
+protected:
+	virtual void BeginPlay() override;
 };

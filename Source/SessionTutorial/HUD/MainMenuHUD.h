@@ -18,6 +18,8 @@ class SESSIONTUTORIAL_API AMainMenuHUD : public AHUD
 public:
 	virtual void BeginPlay() override;
 	void TearDown();
+
+	void SetServerList(const TArray<FOnlineSessionSearchResult>& SearchResults);
 private:
 	UPROPERTY(EditDefaultsOnly, Meta = (AllowPrivateAccess = true))
 	TSubclassOf<UMainMenuWidget> MainMenuWidgetClass;

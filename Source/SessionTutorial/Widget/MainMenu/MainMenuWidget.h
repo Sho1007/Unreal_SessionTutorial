@@ -13,6 +13,9 @@ class UButton;
 class IMainMenuInterface;
 class UWidgetSwitcher;
 class UEditableText;
+class UScrollBox;
+class UServerListSlotWidget;
+class UCircularThrobber;
 UCLASS()
 class SESSIONTUTORIAL_API UMainMenuWidget : public UUserWidget
 {
@@ -25,32 +28,49 @@ public:
 
 	void SetMainMenuInterface(IMainMenuInterface* NewMainMenuInterface);
 
+	void SetServerList(const TArray<FOnlineSessionSearchResult>& SearchResults);
+
+	void SelectIndex(uint32 Index);
+
 private:
 	UFUNCTION()
 	void OnClickedHostButton();
 	UFUNCTION()
 	void OnClickedJoinButton();
 	UFUNCTION()
+	void OnClickedQuitButton();
+
+	UFUNCTION()
 	void OnClickedConnectButton();
 	UFUNCTION()
 	void OnClickedCancleButton();
 	
 private:
+	// MainMenu
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
 	UButton* Btn_Host;
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
 	UButton* Btn_Join;
-	
+	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
+	UButton* Btn_Quit;
+	// JoinMenu
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
 	UButton* Btn_Connect;
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
 	UButton* Btn_Cancle;
+	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
+	UScrollBox* ServerList;
+	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
+	UCircularThrobber* Throbber;
+
+	UPROPERTY(EditDefaultsOnly, Meta = (AllowPrivateAccess = true))
+	TSubclassOf<UServerListSlotWidget> ServerListSlotWidgetClass;
 
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
 	UWidgetSwitcher* WS_ChangeMenu;
 
-	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
-	UEditableText* ET_IPAddress;
 
 	IMainMenuInterface* MainMenuInterface;
+
+	TOptional<uint32> SelectedIndex;
 };
