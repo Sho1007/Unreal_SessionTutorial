@@ -20,6 +20,7 @@ public:
 	void Setup(UMainMenuWidget* NewParentWidget, uint32 NewIndex);
 
 	void SetServerName(FText NewServerName);
+	void SetUnclicked();
 
 protected:
 	virtual bool Initialize() override;
@@ -27,6 +28,10 @@ protected:
 private:
 	UFUNCTION()
 	virtual void OnClicked();
+	UFUNCTION()
+	virtual void OnHovered();
+	UFUNCTION()
+	virtual void OnUnhovered();
 private:
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
 	UButton* Button;
@@ -35,4 +40,6 @@ private:
 
 	UMainMenuWidget* Parent;
 	uint32 Index;
+
+	bool bIsClicked = false;
 };

@@ -102,7 +102,8 @@ void UMyGameInstance::CreateSession()
 		SessionSettings.bIsLANMatch = false; // Is LAN Connection?
 		SessionSettings.NumPublicConnections = 2; // How many Connection
 		SessionSettings.bShouldAdvertise = true;
-		SessionSettings.bUsesPresence = true;
+		SessionSettings.bUseLobbiesIfAvailable = true;
+
 		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 	}
 }
@@ -149,19 +150,19 @@ void UMyGameInstance::FindSession()
 	if (SessionSearch.IsValid())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UMyGameInstance::Init : Starting Find Session"));
+
 		//SessionSearch->bIsLanQuery = true;
 		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
-		SessionSearch->MaxSearchResults = 100;
-		// SessionSearch->QuerySettings.Set(); Setting Depends on API what is used
+		SessionSearch->MaxSearchResults = 300;
 		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 	}
 }
 
 void UMyGameInstance::OnFindSessionsComplete(bool bSuccessed)
 {
-	if (bSuccessed && SessionSearch.IsValid())
+	if (SessionSearch.IsValid())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UMyGameInstance::OnFindSessionsComplete : Find Session Finished"));
+		UE_LOG(LogTemp, Warning, TEXT("UMyGameInstance::OnFindSessionsComplete : Find Session Finished : %d"), SessionSearch->SearchResults.Num());
 
 		if (UWorld* World = GetWorld())
 		{
