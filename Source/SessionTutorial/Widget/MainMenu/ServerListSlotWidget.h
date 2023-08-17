@@ -20,6 +20,10 @@ public:
 	void Setup(UMainMenuWidget* NewParentWidget, uint32 NewIndex);
 
 	void SetServerName(FText NewServerName);
+	void SetHostUser(FText NewHostUser);
+	void SetCurrentPlayerCount(int32 NewCurrentPlayerCount);
+	void SetMaxPlayerCount(int32 NewMaxPlayerCount);
+
 	void SetUnclicked();
 
 protected:
@@ -37,6 +41,12 @@ private:
 	UButton* Button;
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
 	UTextBlock* ServerName;
+	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
+	UTextBlock* HostUser;
+	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
+	UTextBlock* CurrentPlayerCount;
+	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
+	UTextBlock* MaxPlayerCount;
 
 	UMainMenuWidget* Parent;
 	uint32 Index;

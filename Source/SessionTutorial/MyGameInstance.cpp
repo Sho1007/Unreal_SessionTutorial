@@ -98,11 +98,19 @@ void UMyGameInstance::CreateSession()
 {
 	if (SessionInterface.IsValid())
 	{
-		FOnlineSessionSettings SessionSettings;
-		SessionSettings.bIsLANMatch = false; // Is LAN Connection?
-		SessionSettings.NumPublicConnections = 2; // How many Connection
+		FOnlineSessionSettings SessionSettings;	
+
+		if (IOnlineSubsystem::Get()->GetSubsystemName() == TEXT("NULL"))
+		{
+			SessionSettings.bIsLANMatch = true;
+		}
+		else
+		{
+			SessionSettings.bIsLANMatch = false; // Is LAN Connection?
+		}
+		SessionSettings.NumPublicConnections = 5; // How many Connection
 		SessionSettings.bShouldAdvertise = true;
-		SessionSettings.bUseLobbiesIfAvailable = true;
+		//SessionSettings.bUseLobbiesIfAvailable = true;
 
 		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 	}
@@ -151,9 +159,16 @@ void UMyGameInstance::FindSession()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UMyGameInstance::Init : Starting Find Session"));
 
-		//SessionSearch->bIsLanQuery = true;
-		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
-		SessionSearch->MaxSearchResults = 300;
+		if (IOnlineSubsystem::Get()->GetSubsystemName() == TEXT("NULL"))
+		{
+			SessionSearch->bIsLanQuery = true;
+		}
+		else
+		{
+			SessionSearch->bIsLanQuery = false;
+		}
+		//SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+		SessionSearch->MaxSearchResults = 100;
 		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 	}
 }

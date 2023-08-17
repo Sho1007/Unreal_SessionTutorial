@@ -73,11 +73,14 @@ void UMainMenuWidget::SetServerList(const TArray<FOnlineSessionSearchResult>& Se
 		{
 			UServerListSlotWidget* NewChildWidget = CreateWidget<UServerListSlotWidget>(this, ServerListSlotWidgetClass);
 			NewChildWidget->Setup(this, i);
-			NewChildWidget->SetServerName(FText::FromString(SearchResults[i].Session.SessionInfo->ToString()));
+			NewChildWidget->SetServerName(FText::FromString(SearchResults[i].GetSessionIdStr()));
+			NewChildWidget->SetHostUser(FText::FromString(SearchResults[i].Session.OwningUserName));
+			NewChildWidget->SetCurrentPlayerCount(SearchResults[i].Session.NumOpenPublicConnections);
+			NewChildWidget->SetMaxPlayerCount(SearchResults[i].Session.SessionSettings.NumPublicConnections);
 
 			ServerList->AddChild(NewChildWidget);
 		}
-	}
+	}	
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("UMainMenuWidget::SetServerList : ServerListSlotWidgetClass is Invalid"));
@@ -87,6 +90,15 @@ void UMainMenuWidget::SetServerList(const TArray<FOnlineSessionSearchResult>& Se
 void UMainMenuWidget::SelectIndex(uint32 Index)
 {
 	SelectedIndex = Index;
+
+	for (int i = 0; i < ServerList->GetChildrenCount(); ++i)
+	{
+		if (i == Index) continue;
+		if (UServerListSlotWidget* ServerListSlot = Cast<UServerListSlotWidget>(ServerList->GetChildAt(i)))
+		{
+			ServerListSlot->SetUnclicked();
+		}
+	}
 }
 
 void UMainMenuWidget::OnClickedHostButton()

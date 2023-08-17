@@ -19,6 +19,21 @@ void UServerListSlotWidget::SetServerName(FText NewServerName)
 	ServerName->SetText(NewServerName);
 }
 
+void UServerListSlotWidget::SetHostUser(FText NewHostUser)
+{
+	HostUser->SetText(NewHostUser);
+}
+
+void UServerListSlotWidget::SetCurrentPlayerCount(int32 NewCurrentPlayerCount)
+{
+	CurrentPlayerCount->SetText(FText::FromString(FString::Printf(TEXT("%d"), NewCurrentPlayerCount)));
+}
+
+void UServerListSlotWidget::SetMaxPlayerCount(int32 NewMaxPlayerCount)
+{
+	MaxPlayerCount->SetText(FText::FromString(FString::Printf(TEXT("%d"), NewMaxPlayerCount)));
+}
+
 void UServerListSlotWidget::SetUnclicked()
 {
 	bIsClicked = false;
@@ -54,4 +69,5 @@ void UServerListSlotWidget::OnHovered()
 void UServerListSlotWidget::OnUnhovered()
 {
 	if (bIsClicked == false) ServerName->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
+	else ServerName->SetColorAndOpacity(FLinearColor(0, 1, 0, 1));
 }
