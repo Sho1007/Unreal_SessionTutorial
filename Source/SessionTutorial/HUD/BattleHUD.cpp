@@ -15,7 +15,7 @@ void ABattleHUD::TearDown()
 
 void ABattleHUD::ToggleInGameMenu()
 {
-	InGameMenuWidget->GetVisibility() == ESlateVisibility::Visible ? InGameMenuWidget->TearDown() : InGameMenuWidget->Setup();
+	InGameMenuWidget->GetVisibility() == ESlateVisibility::Visible ? InGameMenuWidget->Setup() : InGameMenuWidget->Setup();
 }
 
 void ABattleHUD::BeginPlay()
@@ -26,7 +26,8 @@ void ABattleHUD::BeginPlay()
 	{
 		InGameMenuWidget = CreateWidget<UInGameMenuWidget>(GetOwningPlayerController(), InGameMenuWidgetClass, TEXT("InGameMenuWidget"));
 		check(InGameMenuWidget);
-		InGameMenuWidget->TearDown();
+		InGameMenuWidget->AddToViewport();
+		InGameMenuWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
 	else
 	{

@@ -19,12 +19,15 @@ bool UMainMenuWidget::Initialize()
 {
 	if (!Super::Initialize()) return false;
 
-	Btn_Host->OnClicked.AddDynamic(this, &UMainMenuWidget::OnClickedHostButton);
-	Btn_Join->OnClicked.AddDynamic(this, &UMainMenuWidget::OnClickedJoinButton);
+	Btn_HostMenu->OnClicked.AddDynamic(this, &UMainMenuWidget::OnClickedHostMenuButton);
+	Btn_JoinMenu->OnClicked.AddDynamic(this, &UMainMenuWidget::OnClickedJoinMenuButton);
 	Btn_Quit->OnClicked.AddDynamic(this, &UMainMenuWidget::OnClickedQuitButton);
 
 	Btn_Connect->OnClicked.AddDynamic(this, &UMainMenuWidget::OnClickedConnectButton);
-	Btn_Cancle->OnClicked.AddDynamic(this, &UMainMenuWidget::OnClickedCancleButton);
+	Btn_Cancel->OnClicked.AddDynamic(this, &UMainMenuWidget::OnClickedCancelButton);
+
+	Btn_Host->OnClicked.AddDynamic(this, &UMainMenuWidget::OnClickedHostButton);
+	Btn_CancelFromHostMenu->OnClicked.AddDynamic(this, &UMainMenuWidget::OnClickedCancelButton);
 
 	return true;
 }
@@ -73,14 +76,26 @@ void UMainMenuWidget::SetServerList(const TArray<FOnlineSessionSearchResult>& Se
 		{
 			UServerListSlotWidget* NewChildWidget = CreateWidget<UServerListSlotWidget>(this, ServerListSlotWidgetClass);
 			NewChildWidget->Setup(this, i);
-			NewChildWidget->SetServerName(FText::FromString(SearchResults[i].GetSessionIdStr()));
+			
 			NewChildWidget->SetHostUser(FText::FromString(SearchResults[i].Session.OwningUserName));
-			NewChildWidget->SetCurrentPlayerCount(SearchResults[i].Session.NumOpenPublicConnections);
-			NewChildWidget->SetMaxPlayerCount(SearchResults[i].Session.SessionSettings.NumPublicConnections);
+			NewChildWidget->SetCurrentPlayerCount(SearchResults[i].Session.SessionSettings.NumPublicConnections - SearchResults[i].Session.NumOpenPublicConnections);
+			NewChildWidget->SetMaxPlayerCount(SearchResults[i].Session.SessionSettings.NumPublicConnections);		
+			FString SessionName;
+			if (SearchResults[i].Session.SessionSettings.Get(TEXT("SessionName"), SessionName))
+			{
+				NewChildWidget->SetServerName(FText::FromString(SessionName));
+			}
+			else
+			{
+				NewChildWidget->SetServerName(FText::FromName(TEXT("Unknown Server")));
+			}
+			
+			//UE_LOG(LogTemp, Error, TEXT("Test String : %s"), *TestString);
+			
 
 			ServerList->AddChild(NewChildWidget);
 		}
-	}	
+	}
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("UMainMenuWidget::SetServerList : ServerListSlotWidgetClass is Invalid"));
@@ -101,22 +116,20 @@ void UMainMenuWidget::SelectIndex(uint32 Index)
 	}
 }
 
-void UMainMenuWidget::OnClickedHostButton()
+void UMainMenuWidget::OnClickedHostMenuButton()
 {
-	if (MainMenuInterface)
-	{
-		MainMenuInterface->Host();
-	}
+	ET_ServerName->SetText(FText());
+	WS_ChangeMenu->SetActiveWidgetIndex(1);
 }
 
-void UMainMenuWidget::OnClickedJoinButton()
+void UMainMenuWidget::OnClickedJoinMenuButton()
 {
 	ServerList->ClearChildren();
 	Throbber->SetVisibility(ESlateVisibility::Visible);
 	MainMenuInterface->FindSession();
 	SelectedIndex.Reset();
 
-	WS_ChangeMenu->SetActiveWidgetIndex(1);
+	WS_ChangeMenu->SetActiveWidgetIndex(2);
 }
 
 void UMainMenuWidget::OnClickedConnectButton()
@@ -135,7 +148,7 @@ void UMainMenuWidget::OnClickedConnectButton()
 	}
 }
 
-void UMainMenuWidget::OnClickedCancleButton()
+void UMainMenuWidget::OnClickedCancelButton()
 {
 	// Clear Text
 	//ET_IPAddress->SetText(FText());
@@ -146,4 +159,15 @@ void UMainMenuWidget::OnClickedCancleButton()
 void UMainMenuWidget::OnClickedQuitButton()
 {
 	UKismetSystemLibrary::QuitGame(GetWorld(), GetOwningPlayer(), EQuitPreference::Quit, false);
+}
+
+void UMainMenuWidget::OnClickedHostButton()
+{
+	if (MainMenuInterface)
+	{
+		if (ET_ServerName->GetText().ToString().Len() > 0)
+		{
+			MainMenuInterface->Host(ET_ServerName->GetText().ToString());
+		}
+	}
 }

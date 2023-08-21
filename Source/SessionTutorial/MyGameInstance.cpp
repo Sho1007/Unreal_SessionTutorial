@@ -9,8 +9,6 @@
 #include "HUD/MainMenuHUD.h"
 #include "HUD/BattleHUD.h"
 
-static const FName SESSION_NAME = TEXT("My Session Game");
-
 UMyGameInstance::UMyGameInstance(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
@@ -38,14 +36,15 @@ void UMyGameInstance::Init()
 	}
 }
 
-void UMyGameInstance::Host()
+void UMyGameInstance::Host(FString NewServerName)
 {
 	if (SessionInterface.IsValid())
 	{
-		FNamedOnlineSession* Session = SessionInterface->GetNamedSession(SESSION_NAME);
+		ServerName = NewServerName;
+		FNamedOnlineSession* Session = SessionInterface->GetNamedSession(EName::GameSession);
 		if (Session != nullptr)
 		{
-			SessionInterface->DestroySession(SESSION_NAME);
+			SessionInterface->DestroySession(EName::GameSession);
 		}
 		else
 		{
@@ -69,8 +68,7 @@ void UMyGameInstance::Join(uint32 Index)
 				{
 					HUD->TearDown();
 				}
-
-				SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[Index]);
+				SessionInterface->JoinSession(0, EName::GameSession, SessionSearch->SearchResults[Index]);
 			}
 		}
 	}	
@@ -108,11 +106,13 @@ void UMyGameInstance::CreateSession()
 		{
 			SessionSettings.bIsLANMatch = false; // Is LAN Connection?
 		}
-		SessionSettings.NumPublicConnections = 5; // How many Connection
+		SessionSettings.NumPublicConnections = 3; // How many Connection
 		SessionSettings.bShouldAdvertise = true;
+		SessionSettings.bUsesPresence = true;
+		SessionSettings.Set(TEXT("SessionName"), ServerName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 		//SessionSettings.bUseLobbiesIfAvailable = true;
 
-		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
+		SessionInterface->CreateSession(0, EName::GameSession, SessionSettings);
 	}
 }
 
@@ -136,7 +136,7 @@ void UMyGameInstance::OnCreateSessionComplete(FName SessionName, bool bSuccessed
 				}
 			}
 
-			World->ServerTravel(TEXT("/Game/Levels/L_Laboratory?listen"));
+			World->ServerTravel(TEXT("/Game/Levels/L_Lobby?listen"));
 		}
 	}
 }
@@ -167,10 +167,15 @@ void UMyGameInstance::FindSession()
 		{
 			SessionSearch->bIsLanQuery = false;
 		}
-		//SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 		SessionSearch->MaxSearchResults = 100;
 		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 	}
+}
+
+void UMyGameInstance::StartSession()
+{
+	SessionInterface->StartSession(EName::GameSession);
 }
 
 void UMyGameInstance::OnFindSessionsComplete(bool bSuccessed)
@@ -217,5 +222,5 @@ void UMyGameInstance::OnJoinSessionsComplete(FName SessionName, EOnJoinSessionCo
 		}
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Session Name : %s"), *SessionName.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("Session Name : %s"), *SessionName.ToString());
 }

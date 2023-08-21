@@ -27,10 +27,12 @@ public:
 	virtual void Init() override;
 
 	// Inherited via IMainMenuInterface
-	virtual void Host() override;
+	virtual void Host(FString NewServerName) override;
 	virtual void Join(uint32 Index) override;
 	virtual void LoadMainMenu() override;
 	virtual void FindSession() override;
+
+	void StartSession();
 
 private:
 	void CreateSession();
@@ -41,4 +43,5 @@ private:
 
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+	FString ServerName;
 };

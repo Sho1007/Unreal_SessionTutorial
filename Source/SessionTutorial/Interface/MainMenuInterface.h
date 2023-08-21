@@ -15,7 +15,7 @@ class SESSIONTUTORIAL_API IMainMenuInterface
 	GENERATED_BODY()
 public:
 	virtual void Join(uint32 Index) = 0;
-	virtual void Host() = 0;
+	virtual void Host(FString NewServerName) = 0;
 	virtual void LoadMainMenu() = 0;
 	virtual void FindSession() = 0;
 };

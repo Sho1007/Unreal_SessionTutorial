@@ -12,7 +12,6 @@ void UInGameMenuWidget::Setup()
 	UE_LOG(LogTemp, Log, TEXT("UInGameMenuWidget::Setup Called"));
 	if (APlayerController* PlayerController = GetOwningPlayer())
 	{
-		this->AddToViewport();
 		PlayerController->SetInputMode(FInputModeGameAndUI());
 		PlayerController->SetShowMouseCursor(true);
 		this->SetVisibility(ESlateVisibility::Visible);
@@ -23,7 +22,6 @@ void UInGameMenuWidget::TearDown()
 {
 	if (APlayerController* PlayerController = GetOwningPlayer())
 	{
-		this->RemoveFromViewport();
 		PlayerController->SetInputMode(FInputModeGameOnly());
 		PlayerController->SetShowMouseCursor(false);
 		this->SetVisibility(ESlateVisibility::Collapsed);

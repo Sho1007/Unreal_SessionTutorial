@@ -34,30 +34,40 @@ public:
 
 private:
 	UFUNCTION()
-	void OnClickedHostButton();
+	void OnClickedHostMenuButton();
 	UFUNCTION()
-	void OnClickedJoinButton();
+	void OnClickedJoinMenuButton();
 	UFUNCTION()
 	void OnClickedQuitButton();
 
 	UFUNCTION()
+	void OnClickedHostButton();
+
+	UFUNCTION()
 	void OnClickedConnectButton();
 	UFUNCTION()
-	void OnClickedCancleButton();
+	void OnClickedCancelButton();
 	
 private:
 	// MainMenu
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
-	UButton* Btn_Host;
+	UButton* Btn_HostMenu;
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
-	UButton* Btn_Join;
+	UButton* Btn_JoinMenu;
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
 	UButton* Btn_Quit;
+	// HostMenu
+	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
+	UEditableText* ET_ServerName;
+	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
+	UButton* Btn_Host;
+	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
+	UButton* Btn_CancelFromHostMenu;
 	// JoinMenu
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
 	UButton* Btn_Connect;
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
-	UButton* Btn_Cancle;
+	UButton* Btn_Cancel;
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
 	UScrollBox* ServerList;
 	UPROPERTY(Meta = (AllowPrivateAccess = true, BindWidget))
